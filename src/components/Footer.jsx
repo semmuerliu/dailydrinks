@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { FaHeart } from 'react-icons/fa';
 
 class Footer extends Component {
     render() {
         return (
-            <div>Footer</div>
+            <div>This app is made with <FaHeart/>by Summer Liu</div>
         );
     }
 }
