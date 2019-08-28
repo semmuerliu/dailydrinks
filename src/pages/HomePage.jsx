@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
-import Banner from '../components/Banner';
-import styles from './styles/homepage.modle.scss';
+// import Banner from '../components/Banner';
+import styles from './styles/homepage.module.scss';
 import OrderList from '../components/OrderList';
 
 // fake data
 const orders = [
     {
         key: 1,
-        name: 'Espresso Martini'
+        name: 'Espresso Martini',
+        price: 10,
     },
     {
         key: 2,
-        name: 'American Dream'
+        name: 'American Dream',
+        price: 20,
     },
     {
         key: 3,
-        name: 'Bloody Mary'
+        name: 'Bloody Mary',
+        price: 8,
     },
     {
         key: 4,
-        name: 'Mojito'
+        name: 'Mojito',
+        price: 15,
     },
 ];
 class Home extends Component {
@@ -30,10 +34,8 @@ class Home extends Component {
         };
     }
 
-    getOrder = () => {
-    }
-
-    createOrder = () => {
+    redirtect = () => {
+        this.props.history.push(`/createorder`)
     }
 
     deleteOrder = () => {
@@ -48,9 +50,12 @@ class Home extends Component {
             <div className={styles.homePage}>
                 {/* <Banner/> */}
                 <OrderList orders={orders}/>
+                <button onClick={this.redirtect}>Create An New Order</button>
+
                 <div className='content'>
                     this is content
                 </div>
+
             </div>
         );
     }
