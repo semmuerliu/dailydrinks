@@ -7,6 +7,10 @@ class OrderList extends Component {
         this.state = {}
     }
 
+    handleRedirect = (orderId, orderPrice) => {
+        this.props.history.push(`/orders/${orderId}`);
+    }
+
     render() {
         const renderOrders = this.props.orders.map((order, index) => {
             return (

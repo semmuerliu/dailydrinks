@@ -7,11 +7,16 @@
 
 ## Initialization
 ```
-npm start
-yarn start
+npm install
+yarn add
 ```
 
 ## Useful Scripts
+```
+npm start
+yarn start
+```
+Run dev code
 
 ```
 npm test

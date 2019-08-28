@@ -13,8 +13,8 @@ class App extends React.Component {
       <Router>
           <Navigator/>
           <Route exact path="/" component={Home}/>
-          <Route path="/orders/:orderId" component={Order}/>
           <Route path="/createorder" component={CreateOrder}/>
+          <Route pazth="/orders/:orderId" component={Order}/>
           <Footer/>
       </Router>
     );

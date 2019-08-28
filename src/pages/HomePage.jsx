@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import Banner from '../components/Banner';
+import Banner from '../components/Banner';
 import styles from './styles/homepage.module.scss';
 import OrderList from '../components/OrderList';
 
@@ -48,8 +48,8 @@ class Home extends Component {
         const { orders } = this.state;
         return (
             <div className={styles.homePage}>
-                {/* <Banner/> */}
-                <OrderList orders={orders}/>
+                <Banner/>
+                <OrderList history={this.props.history} orders={orders}/>
                 <button onClick={this.redirtect}>Create An New Order</button>
 
                 <div className='content'>
