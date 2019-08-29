@@ -12,7 +12,7 @@ class OrderList extends Component {
             return (
                 <div key={`order-${index}`}>
                     <a href={`/orders/${order.key}`}>{order.name} ${order.price}</a>
-                    <button onClick={this.props.deleteOrder(order.key)}>Delete</button>
+                    <button onClick={this.props.handleDelete(order.key)}>Delete</button>
                 </div>
             );
         });

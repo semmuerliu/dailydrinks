@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles/homepage.module.scss';
 import OrderList from '../components/OrderList';
+import { initialDB } from '../helper';
 
 // fake data
 const orders = [
@@ -30,6 +31,10 @@ const orders = [
         remark: '',
     },
 ];
+
+let request = window.indexedDB.open('dailyDrinksDB', 1);
+let db;
+let objectStore;
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -38,64 +43,102 @@ class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        this.openDB();
+    async componentDidMount() {
+        await initialDB(orders);
+        this.getOrders();
     }
 
-    openDB = () => {
-        let request = window.indexedDB.open('dailyDrinksDB', 1);
-        let db;
-        let objectStore;
+    // initialDB = () => {
+    //     request.onerror = (e) => {
+    //         console.log(e.target.errorCode);
+    //     };
 
+    //     request.onsuccess = (e) => {
+    //         db = request.result;
+    //         console.log(e.target);
+    //     };
+
+    //     request.onupgradeneeded = (e) => {
+    //         db = e.target.result;
+    //         if (!db.objectStoreNames.contains('orders')) {
+    //             objectStore = db.createObjectStore('orders', { keyPath: 'key', autoIncrement: true });
+
+    //             orders.forEach((order) => {
+    //                 objectStore.add(order)
+    //             });
+    //         }
+    //     }
+    // }
+
+    getOrders = () => {
         request.onerror = (e) => {
             console.log(e.target.errorCode);
         };
 
         request.onsuccess = (e) => {
             db = request.result;
-            console.log(e.target);
-        };
-        request.onupgradeneeded = (event) => {
-            db = event.target.result;
-            if (!db.objectStoreNames.contains('orders')) {
-                objectStore = db.createObjectStore('orders', { keyPath: 'id', autoIncrement: true });
-
-                orders.forEach((order) => {
-                    objectStore.add(order)
+            const transaction = db.transaction(["orders"], "readwrite");
+            objectStore = transaction.objectStore("orders");
+            objectStore.getAll().onsuccess = (e) => {
+                // console.log(e.target.result);
+                this.setState({
+                    orders: e.target.result,
                 });
+            };
+        };
+    }
+
+    handleChange = (name) => (e) => {
+        this.setState({
+            order: {
+                ...this.state.order,
+                [name]: e.target.value,
+            },
+        });
+
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains('orders')) {
+                objectStore = db.createObjectStore('orders', { keyPath: 'key', autoIncrement: true });
+
+                objectStore.add(this.state.order);
             }
         }
     }
 
-    handleSubmit = (name) => (e) => {
-        console.log(name);
-        console.log(e.target.value);
-        // this.setState({
-        //     orders: 
-        // });
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.setState({
+            orders : [
+                ...this.state.orders,
+                this.state.order,
+            ],
+        });
     }
 
-    deleteOrder = (orderId) => {
+    handleDelete = (orderId) => {
     }
 
-    editOrder = () => {
+    handleEdit = () => {
     }
 
     render() {
         const { orders } = this.state;
+        // console.log('this.state', this.state);
         return (
             <div className={styles.homePage}>
                 <OrderList
-                    history={this.props.history}
                     orders={orders}
-                    deleteOrder={this.deleteOrder}
+                    handleDelete={this.handleDelete}
                 />
                 <div className={styles.content}>
                     <p>Create An Order</p>
-                    <input onChange={this.handleSubmit('name')} name='name' placeholder='Name'></input>
-                    <input onChange={this.handleSubmit('price')} name='price' placeholder='Price'></input>
-                    <input onChange={this.handleSubmit('remark')} name='remark' placeholder='Remark'></input>
-                    <button>Confirm</button>
+                    <form onSubmit={this.handleSubmit}>
+                        <input onChange={this.handleChange('name')} name='name' placeholder='Name'></input>
+                        <input onChange={this.handleChange('price')} name='price' placeholder='Price'></input>
+                        <input onChange={this.handleChange('remark')} name='remark' placeholder='Remark'></input>
+                        <button type='submit'>Confirm</button>
+                    </form>
                 </div>
             </div>
         );
