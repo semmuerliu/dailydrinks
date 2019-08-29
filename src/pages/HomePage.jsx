@@ -1,42 +1,15 @@
 import React, { Component } from 'react';
 import styles from './styles/homepage.module.scss';
 import OrderList from '../components/OrderList';
+import CreateOrder from '../components/CreateOrder';
+import EditOrder from '../components/EditOrder';
 import store from 'store2';
-
-// fake data
-const orders = [
-    {
-        key: 1,
-        name: 'Espresso Martini',
-        price: 10,
-        remark: '',
-    },
-    {
-        key: 2,
-        name: 'American Dream',
-        price: 20,
-        remark: '',
-
-    },
-    {
-        key: 3,
-        name: 'Bloody Mary',
-        price: 8,
-        remark: '',
-    },
-    {
-        key: 4,
-        name: 'Mojito',
-        price: 15,
-        remark: '',
-    },
-];
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state ={
-            orders: orders,
+            // orders: orders,
         };
     }
 
@@ -50,31 +23,26 @@ class Home extends Component {
         });
     };
 
-    handleChange = (name) => (e) => {
+    handleSubmit = (name) => async(e) => {
+        e.preventDefault();
         const { order, orders } = this.state;
-        this.setState({
+        await this.setState({
             order: {
                 ...order,
                 key: orders.length + 1,
                 [name]: e.target.value,
             },
         });
-    }
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        const { order, orders } = this.state;
+        store.session(orders.length + 1 , order);
         this.setState({
-            orders : [
+            orders: [
                 ...orders,
-                order,
             ],
         });
-        store.session(orders.length + 1 , order);
     }
 
     handleDelete = (orderId) => async() => {
-        await store.remove(orderId);
+        await store.session.remove(orderId);
         const { orders } = this.state;
         this.setState({
             orders : [
@@ -85,27 +53,45 @@ class Home extends Component {
         });
     }
 
+    handleChange = (name) => (e) => {
+        const { order, orders, orderId } = this.state;
+        this.setState({
+            ...orderId,
+            order: {
+                ...order,
+                key: orders.length + 1,
+                [name]: e.target.value,
+            },
+        });
+    }
+
+    handleEdit = (orderId) => async(e) => {
+        e.preventDefault();
+        await this.setState({
+            orderId,
+        });
+        console.log('handleEdit', this.state);
+        store.session.get(this.state.orderId);
+        store.session.set(this.state.orderId, this.state.order);
+    }
+
     render() {
-        const { orders } = this.state;
+        const { orders, orderId } = this.state;
         return (
             <div className={styles.homePage}>
                 <OrderList
                     orders={orders}
                     handleDelete={this.handleDelete}
-                    history={this.props.history}
+                    handleEdit={this.handleEdit}
                 />
-
-                <span/>
-
-                <div className={styles.content}>
-                    <p>Create An Order</p>
-                    <form onSubmit={this.handleSubmit}>
-                        <input onChange={this.handleChange('name')} name='name' placeholder='Name'></input>
-                        <input onChange={this.handleChange('price')} name='price' placeholder='Price'></input>
-                        <input onChange={this.handleChange('remark')} name='remark' placeholder='Remark'></input>
-                        <button type='submit'>Confirm</button>
-                    </form>
-                </div>
+                <EditOrder
+                    orderId={orderId}
+                    handleChange={this.handleChange}
+                    handleEdit={this.handleEdit}
+                />
+                <CreateOrder
+                    handleSubmit={this.handleSubmit}
+                />
             </div>
         );
     }
