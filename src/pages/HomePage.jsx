@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles/homepage.module.scss';
 import OrderList from '../components/OrderList';
-import { initialDB } from '../helper';
+import store from 'store2';
 
 // fake data
 const orders = [
@@ -32,9 +32,6 @@ const orders = [
     },
 ];
 
-let request = window.indexedDB.open('dailyDrinksDB', 1);
-let db;
-let objectStore;
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -43,33 +40,22 @@ class Home extends Component {
         };
     }
 
-    async componentDidMount() {
-        await initialDB(orders);
-        this.getOrders();
+    componentDidMount() {
+        this.initialState();
     }
 
-    getOrders = () => {
-        request.onerror = (e) => {
-            console.log(e.target.errorCode);
-        };
-
-        request.onsuccess = (e) => {
-            db = request.result;
-            const transaction = db.transaction(["orders"], "readwrite");
-            objectStore = transaction.objectStore("orders");
-            objectStore.getAll().onsuccess = (e) => {
-                // console.log(e.target.result);
-                this.setState({
-                    orders: e.target.result,
-                });
-            };
-        };
-    }
+    initialState = () => {
+        this.setState({
+            orders: Object.keys(store.session.getAll()).map((key) => store.session.getAll()[key]),
+        });
+    };
 
     handleChange = (name) => (e) => {
+        const { order, orders } = this.state;
         this.setState({
             order: {
-                ...this.state.order,
+                ...order,
+                key: orders.length + 1,
                 [name]: e.target.value,
             },
         });
@@ -77,37 +63,42 @@ class Home extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        const { order, orders } = this.state;
         this.setState({
             orders : [
-                ...this.state.orders,
-                this.state.order,
+                ...orders,
+                order,
             ],
         });
-
-        request.onsuccess = () => {
-            db = request.result;
-            const transaction = db.transaction(["orders"], "readwrite");
-            objectStore = transaction.objectStore("orders");
-            objectStore.add(this.state.order);
-            console.log(objectStore)
-        };
+        store.session(orders.length + 1 , order);
     }
 
-    handleDelete = (orderId) => {
+    handleDelete = (orderId) => async() => {
+        await store.remove(orderId);
+        const { orders } = this.state;
+        this.setState({
+            orders : [
+                ...orders.filter((order) => {
+                    return order.key !== orderId;
+                })
+            ],
+        });
     }
 
-    handleEdit = () => {
+    handleEdit = (orderId) => {
+        // console.log(store.session.set(orderId));
     }
 
     render() {
         const { orders } = this.state;
-        // console.log('this.state', this.state);
         return (
             <div className={styles.homePage}>
                 <OrderList
                     orders={orders}
                     handleDelete={this.handleDelete}
+                    history={this.props.history}
                 />
+
                 <div className={styles.content}>
                     <p>Create An Order</p>
                     <form onSubmit={this.handleSubmit}>

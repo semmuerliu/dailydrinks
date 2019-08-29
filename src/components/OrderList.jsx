@@ -6,16 +6,38 @@ class OrderList extends Component {
         super(props);
         this.state = {}
     }
+    componentDidMount() {
+        this.setState({
+            orders: this.props.orders,
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.orders !== prevProps.orders) {
+            this.setState({
+                orders: this.props.orders,
+            });
+        }
+    }
+
+    handleRedirect = (orderId) => () => {
+        this.props.history.push(`/${orderId}`);
+    }
 
     render() {
-        const renderOrders = this.props.orders.map((order, index) => {
-            return (
-                <div key={`order-${index}`}>
-                    <a href={`/orders/${order.key}`}>{order.name} ${order.price}</a>
-                    <button onClick={this.props.handleDelete(order.key)}>Delete</button>
-                </div>
-            );
-        });
+        let renderOrders;
+        if (this.state.orders) {
+            renderOrders = this.state.orders.map((order, index) => {
+                return (
+                    <div key={`order-${index}`}>
+                        <a href={`/orders/${order.key}`}>{order.name} ${order.price}</a>
+                        <button onClick={this.props.handleDelete(order.key)}>Delete</button>
+                        <button onClick={this.handleRedirect(order.key)}>Edit</button>
+                    </div>
+                );
+            });
+        }
+
         return (
             <div className={styles.orderList}>
                 {renderOrders}
