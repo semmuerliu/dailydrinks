@@ -6,7 +6,11 @@ class Navigator extends Component {
     render() {
         return (
             <div className={styles.navigator}>
-                <a href='/' target="_blank" rel="noopener noreferrer"><FaCocktail className={styles.cocktailIcon}/></a>
+                <a href='/' target="_blank" rel="noopener noreferrer">
+                    <div className={styles.cocktailIcon}>
+                        <FaCocktail/>
+                    </div>
+                </a>
             </div>
         );
     }

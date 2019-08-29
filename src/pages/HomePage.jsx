@@ -85,10 +85,6 @@ class Home extends Component {
         });
     }
 
-    handleEdit = (orderId) => {
-        // console.log(store.session.set(orderId));
-    }
-
     render() {
         const { orders } = this.state;
         return (

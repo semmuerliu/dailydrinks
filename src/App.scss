@@ -1,33 +1,83 @@
-.App {
-  text-align: center;
+@import "./styles/theme.scss";
+@import "./styles/rwd.scss";
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+a {
+    color: $link-color;
+    text-decoration: none;
+    font-size: 12pt;
+    &:active {
+        color: $link-active-color;
+    }
+    // &:visited {
+    //     color: $link-visited-color;
+    // }
+    &:hover {
+        color: $link-hover-color;
+    }
 }
 
-.App-link {
-  color: #61dafb;
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: $background-color;
+    font-size: 12pt;
+    color: $text-color;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+// root element for whole web site
+#app {
+    height: auto;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    background-color: $background-color;
+    position: relative;
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
+    .container {
+        background: linear-gradient(67deg,#390304,#000);
+        // background: radial-gradient(#4e0806, #210302);
+        padding-top: $navigator-height;
+        width: 100%;
+        min-height: calc(100vh - 11.625rem);
+        position: relative;
+        z-index: 0;
+        overflow: hidden;
+    }
+}
+
+button {
+    font-size: 12pt;
+    outline: none;
+    padding: $button-padding;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+input {
+    outline: none;
+    padding: $input-padding;
+}
+
+.loading {
+    text-align: center;
+    padding: 8rem 0;
 }

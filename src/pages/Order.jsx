@@ -5,6 +5,11 @@ class Order extends Component {
         super(props);
         this.state = {};
     }
+
+    handleEdit = (orderId) => {
+        // console.log(store.session.set(orderId));
+    }
+
     render() {
         return (
             <div>
