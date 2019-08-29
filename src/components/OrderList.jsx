@@ -7,14 +7,13 @@ class OrderList extends Component {
         this.state = {}
     }
 
-    handleRedirect = (orderId, orderPrice) => {
-        this.props.history.push(`/orders/${orderId}`);
-    }
-
     render() {
         const renderOrders = this.props.orders.map((order, index) => {
             return (
-                <div key={`order-${index}`}><a href={`/orders/${order.key}`}>{order.name}</a></div>
+                <div key={`order-${index}`}>
+                    <a href={`/orders/${order.key}`}>{order.name} ${order.price}</a>
+                    <button onClick={this.props.deleteOrder(order.key)}>Delete</button>
+                </div>
             );
         });
         return (
