@@ -30,7 +30,7 @@ class OrderList extends Component {
             renderOrders = this.state.orders.map((order, index) => {
                 return (
                     <div className={styles.order} key={`order-${index}`}>
-                        <a href={`/orders/${order.key}`}>{order.name} ${order.price}</a>
+                        <a href={`/orders/${order.key}`}>{index + 1}. {order.name} ${order.price}</a>
                         <button onClick={this.props.handleDelete(order.key)}>Delete</button>
                         <button onClick={this.handleRedirect(order.key)}>Edit</button>
                     </div>

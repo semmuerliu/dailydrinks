@@ -67,6 +67,12 @@ button {
     font-size: 12pt;
     outline: none;
     padding: $button-padding;
+    margin: $button-margin;
+    border-radius: 3px;
+    color: #d5d5d5;
+    // transition: background-color .1s linear,border-color .1s linear,color .1s linear; */
+    background: #18257a;
+    border: none;
     &:hover {
         cursor: pointer;
     }
@@ -75,6 +81,7 @@ button {
 input {
     outline: none;
     padding: $input-padding;
+    margin: $input-margin;
 }
 
 .loading {

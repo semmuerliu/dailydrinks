@@ -2,12 +2,14 @@
 /*************************
  * Essential definitions *
  *************************/
-$background-color: #b4b4b5;
+$background-color: #ffffff;
 $text-color: #000000;
 $shadow: 0 0px 8px 0 rgba(0,0,0,0.4);
 $shadow-hover: 0px 2px 64px -16px rgba(0,0,0,0.4);
-$button-padding: .5rem;
-$input-padding: .5rem;
+$button-padding: .3rem;
+$button-margin: .2rem;
+$input-padding: .3rem;
+$input-margin: .2rem;
 // root container background color
 $container-background-color: #ffffff;
 $container-max-width: 100%;

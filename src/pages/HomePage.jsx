@@ -95,6 +95,8 @@ class Home extends Component {
                     history={this.props.history}
                 />
 
+                <span/>
+
                 <div className={styles.content}>
                     <p>Create An Order</p>
                     <form onSubmit={this.handleSubmit}>
