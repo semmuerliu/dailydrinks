@@ -2,20 +2,16 @@ let request = window.indexedDB.open('dailyDrinksDB', 1);
 let db;
 let objectStore;
 
-function onError() {
+export function initialDB(data) {
     request.onerror = (e) => {
         console.log(e.target.errorCode);
     };
-}
 
-function onSuccess() {
     request.onsuccess = (e) => {
         db = request.result;
         console.log(e.target);
     };
-}
 
-function onUpgradeNeeded(data) {
     request.onupgradeneeded = (e) => {
         db = e.target.result;
         if (!db.objectStoreNames.contains('orders')) {
@@ -26,12 +22,6 @@ function onUpgradeNeeded(data) {
             });
         }
     }
-}
-
-export function initialDB(data) {
-    onError();
-    onSuccess();
-    onUpgradeNeeded(data);
 }
 
 const helper = {

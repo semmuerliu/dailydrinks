@@ -48,28 +48,6 @@ class Home extends Component {
         this.getOrders();
     }
 
-    // initialDB = () => {
-    //     request.onerror = (e) => {
-    //         console.log(e.target.errorCode);
-    //     };
-
-    //     request.onsuccess = (e) => {
-    //         db = request.result;
-    //         console.log(e.target);
-    //     };
-
-    //     request.onupgradeneeded = (e) => {
-    //         db = e.target.result;
-    //         if (!db.objectStoreNames.contains('orders')) {
-    //             objectStore = db.createObjectStore('orders', { keyPath: 'key', autoIncrement: true });
-
-    //             orders.forEach((order) => {
-    //                 objectStore.add(order)
-    //             });
-    //         }
-    //     }
-    // }
-
     getOrders = () => {
         request.onerror = (e) => {
             console.log(e.target.errorCode);
@@ -95,15 +73,6 @@ class Home extends Component {
                 [name]: e.target.value,
             },
         });
-
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            if (!db.objectStoreNames.contains('orders')) {
-                objectStore = db.createObjectStore('orders', { keyPath: 'key', autoIncrement: true });
-
-                objectStore.add(this.state.order);
-            }
-        }
     }
 
     handleSubmit = (e) => {
@@ -114,6 +83,14 @@ class Home extends Component {
                 this.state.order,
             ],
         });
+
+        request.onsuccess = () => {
+            db = request.result;
+            const transaction = db.transaction(["orders"], "readwrite");
+            objectStore = transaction.objectStore("orders");
+            objectStore.add(this.state.order);
+            console.log(objectStore)
+        };
     }
 
     handleDelete = (orderId) => {
