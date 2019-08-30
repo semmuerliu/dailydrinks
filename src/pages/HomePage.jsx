@@ -8,8 +8,8 @@ import store from 'store2';
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state ={
-            // orders: orders,
+        this.state = {
+            showForm: false,
         };
     }
 
@@ -23,16 +23,9 @@ class Home extends Component {
         });
     };
 
-    handleSubmit = (name) => async(e) => {
+    handleSubmit = (e) => {
         e.preventDefault();
         const { order, orders } = this.state;
-        await this.setState({
-            order: {
-                ...order,
-                key: orders.length + 1,
-                [name]: e.target.value,
-            },
-        });
         store.session(orders.length + 1 , order);
         this.setState({
             orders: [
@@ -52,9 +45,15 @@ class Home extends Component {
             ],
         });
     }
+    handleForm = (orderId) => () => {
+        this.setState({
+            showForm: !this.state.showForm,
+            orderId,
+        });
+    }
 
     handleChange = (name) => (e) => {
-        const { order, orders, orderId } = this.state;
+        const { order, orderId, orders } = this.state;
         this.setState({
             ...orderId,
             order: {
@@ -65,31 +64,35 @@ class Home extends Component {
         });
     }
 
-    handleEdit = (orderId) => async(e) => {
+    handleEdit = (e) => {
         e.preventDefault();
-        await this.setState({
-            orderId,
+        const { orderId, order } = this.state;
+        store.session.get(orderId);
+        store.session.set(orderId, order);
+        this.setState({
+            orders: Object.keys(store.session.getAll()).map((key) => store.session.getAll()[key]),
+            showForm: !this.state.showForm,
         });
-        console.log('handleEdit', this.state);
-        store.session.get(this.state.orderId);
-        store.session.set(this.state.orderId, this.state.order);
     }
 
     render() {
-        const { orders, orderId } = this.state;
+        const { orders, orderId, showForm } = this.state;
         return (
             <div className={styles.homePage}>
                 <OrderList
                     orders={orders}
                     handleDelete={this.handleDelete}
-                    handleEdit={this.handleEdit}
+                    handleForm={this.handleForm}
                 />
-                <EditOrder
-                    orderId={orderId}
-                    handleChange={this.handleChange}
-                    handleEdit={this.handleEdit}
-                />
+                {showForm ?
+                    <EditOrder
+                        orderId={orderId}
+                        handleChange={this.handleChange}
+                        handleEdit={this.handleEdit}
+                    />
+                : null}
                 <CreateOrder
+                    handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
                 />
             </div>

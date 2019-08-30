@@ -13,7 +13,8 @@ class OrderList extends Component {
                 return (
                     <div className={styles.order} key={`order-${index}`}>
                         <p>{index + 1}. {order.name} ${order.price}</p>
-                        <button onClick={this.props.handleEdit(order.key)}>Edit</button>
+                        <p>Remark: {order.remark ? order.remark : 'N/A'}</p>
+                        <button onClick={this.props.handleForm(order.key)}>Edit</button>
                         <button onClick={this.props.handleDelete(order.key)}>Delete</button>
                     </div>
                 );

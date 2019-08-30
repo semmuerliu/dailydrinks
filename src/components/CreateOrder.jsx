@@ -11,9 +11,9 @@ class CreateOrder extends Component {
             <div className={styles.createOrder}>
                 <p>Create An Order</p>
                 <form onSubmit={this.props.handleSubmit}>
-                    <input onChange={this.props.handleSubmit('name')} name='name' placeholder='Name'></input>
-                    <input onChange={this.props.handleSubmit('price')} name='price' placeholder='Price'></input>
-                    <input onChange={this.props.handleSubmit('remark')} name='remark' placeholder='Remark'></input>
+                    <input onChange={this.props.handleChange('name')} name='name' placeholder='Name'></input>
+                    <input onChange={this.props.handleChange('price')} name='price' placeholder='Price'></input>
+                    <input onChange={this.props.handleChange('remark')} name='remark' placeholder='Remark'></input>
                     <button type='submit'>Confirm</button>
                 </form>
             </div>

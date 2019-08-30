@@ -17,33 +17,3 @@ $container-max-width: 100%;
 $link-color: #2f2f2f;
 $link-active-color: #856407;
 $link-hover-color: #ae0b00;
-
-/*************
- * Navigator *
- *************/
-$navigator-background-color: $background-color;
-$navigator-text-color: #222222;
-$navigator-height: 4rem;
-$navigator-shadow: 0 2px 4px 0 rgba(0,0,0,.03);
-/****************
- * Modal Dialog *
- ****************/
-$modal-dialog-overlay-color: rgba(0, 0, 0, 0.7);
-$modal-dialog-background-color: #1d1d1d;
-$modal-dialog-text-color: #868484;
-
-
-/****************
- * Modal Dialog RWD Effect *
- ****************/
-%dialog-rwd {
-    @include media-breakpoint-up(sm) {
-        margin: 0 3rem;
-    }
-    @include media-breakpoint-up(md) {
-        margin: 0 10rem;
-    }
-    @include media-breakpoint-up(lg) {
-        margin: 0 15rem;
-    }
-}

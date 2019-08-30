@@ -12,12 +12,11 @@ class EditOrder extends Component {
         let order;
         if (this.props.orderId) {
             order = store.session.get(this.props.orderId)
-            console.log('EditOrder', order)
+            console.log(order)
         }
         return (
             <div className={styles.editOrder}>
-                <p>Edit An Order</p>
-                <form onSubmit={this.props.handleEdit(this.props.orderId)}>
+                <form onSubmit={this.props.handleEdit}>
                     <input onChange={this.props.handleChange('name')} name='name' placeholder='Name'></input>
                     <input onChange={this.props.handleChange('price')} name='price' placeholder='Price'></input>
                     <input onChange={this.props.handleChange('remark')} name='remark' placeholder='Remark'></input>
